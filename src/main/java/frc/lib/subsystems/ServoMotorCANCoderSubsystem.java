@@ -1,0 +1,121 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.lib.subsystems;
+
+import org.littletonrobotics.junction.Logger;
+
+import frc.lib.config.motors.ServoMotorCANCoderConfiguration;
+import frc.lib.encoders.CANCoderInputs;
+import frc.lib.encoders.interfaces.CANCoderIO;
+import frc.lib.motors.MotorInputs;
+import frc.lib.motors.interfaces.MotorIO;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+/**
+ * Extension of {@link ServoMotorSubsystem} that fuses an external {@link CANCoderIO}
+ * with a servo-controlled motor. Many FRC mechanisms prefer absolute feedback to
+ * guarantee a known zero on boot; this subsystem automatically mirrors a CANcoder's
+ * angle into the motor encoder so all of the base class commands "just work".
+ * <p>
+ * <b>Typical use cases:</b> elevators, arms, or turrets that must know their position
+ * after power cycles, or anytime the native motor encoder cannot be mechanically
+ * referenced.
+ * <p>
+ * <b>Example Usage</b>
+ * <pre>{@code
+ * ServoMotorCANCoderConfiguration<TalonFXConfiguration> configuration =
+ *     new ServoMotorCANCoderConfiguration<>("Elevator")
+ *         .withConfig(new TalonFXConfiguration())
+ *         .withCANCoderRotationToUnitRatio(Units.kRotationsToMeters);
+ *
+ * MotorInputs motorInputs = new MotorInputs();
+ * TalonFXIO motor = new TalonFXIO(configuration.kCANDevice);
+ * CANCoderInputs canCoderInputs = new CANCoderInputs();
+ * CANCoderIO canCoder = new Phoenix6CANCoderIO(3); // device id
+ *
+ * public class ElevatorSubsystem extends ServoMotorCANCoderSubsystem<
+ *         MotorInputs, TalonFXIO, CANCoderInputs, CANCoderIO,
+ *         ServoMotorCANCoderConfiguration<TalonFXConfiguration>> {
+ *   public ElevatorSubsystem() {
+ *     super(motorInputs, motor, canCoderInputs, canCoder, configuration);
+ *   }
+ * }
+ * }</pre>
+ *
+ * @param <MI> Motor inputs type that stores encoder/voltage/current data.
+ * @param <M>  {@link MotorIO} controller implementation.
+ * @param <EI> CANcoder inputs container used for logging and offset calculations.
+ * @param <E>  {@link CANCoderIO} hardware interface.
+ * @param <C>  {@link ServoMotorCANCoderConfiguration} applied to this subsystem.
+ */
+public abstract class ServoMotorCANCoderSubsystem<
+              MI extends MotorInputs,                         // Motor inputs class to be used, eg. MotorInputs
+              M extends MotorIO,                              // Motor interface to be used within the subsystem, eg. TalonFXIO
+              EI extends CANCoderInputs,                      // CANCoder inputs class to be used, eg. CANCoderInputs
+              E extends CANCoderIO,                           // Interface of the CAN coder object that we are using
+              C extends ServoMotorCANCoderConfiguration<?>    // What servo motor configuration to be using, eg. S
+            >
+ extends ServoMotorSubsystem<MI, M, C> {
+  
+  // Inputs to be used for this CANcoder
+  protected EI canCoderInputs;
+
+  // The instance of CANCoder IO itself
+  protected E canCoder;
+
+  // Has the "motors" position been offset yet to use the CANcoders position instead of the internal motor position so that we always know where the motor is on initialization
+  protected boolean hasSetOffset = false;
+
+  // Prefix that this motor should ues for logs 
+  private String logPrefix;
+  
+  /** Creates a new ServoMotorSubsystemCanCoder. */
+  public ServoMotorCANCoderSubsystem(
+    MI motorInputs, 
+    M motor, 
+    EI canCoderInputs,
+    E canCoder,
+    C motorConfiguration
+  ) {
+    super(motorInputs, motor, motorConfiguration);
+    this.canCoderInputs = canCoderInputs;
+    this.canCoder = canCoder;
+    this.logPrefix = "Subsystems/" + motorConfiguration.kConfigurationName + "/" + canCoder.getName();
+  }
+
+  @Override
+  public void periodic() {
+    super.periodic();
+
+    // Update the state of the CAN coder
+    canCoder.updateInputs(canCoderInputs);
+    Logger.processInputs("RealOutputs/" + logPrefix + "/Inputs",  canCoderInputs);
+
+    // If this encoder is not fused, has a valid location and the offset hasn't already been set we want to update the motors position to the same value
+    if(!this.config.isFusedCANCoder && !this.hasSetOffset && !Double.isNaN(canCoderInputs.absolutePositionRotations)){
+      updateOffsetImpl();
+      this.hasSetOffset = true;
+    }
+  }
+
+  /**
+   * Implementation to update what the motor thinks its encoder position is to match what the CAN coder is telling it (since absolute it gives us a really solid zero)
+   */
+  protected void updateOffsetImpl(){
+      motor.setCurrentEncoderPosition(canCoderInputs.absolutePositionRotations * this.config.CANCoderRotationToUnitRatio);
+  }
+
+  /**
+   * Command to run to update the offset applied to the motor's encoder, effectively a re-zero
+   * @return The command that was run for chaining
+   */
+  public Command updateCANCoderOffsetCommand(){
+    return new InstantCommand(() -> updateOffsetImpl());
+  }
+
+
+}
