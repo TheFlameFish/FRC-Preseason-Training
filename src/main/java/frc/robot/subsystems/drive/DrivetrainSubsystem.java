@@ -43,44 +43,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
     DrivetrainConfiguration configuration,
     DrivetrainIO drivetrain
   ) {
-    this.logPrefix = "Subsystems/" + configuration.kConfigurationName;
+    
+    //------------------------------------
+    // TODO: 
+    // Setup: 
+    //    this.logPrefix
+    //    this.configuration
+    //    this.drivetrain + loggingPrefix
+    //------------------------------------
 
-    this.configuration = configuration;
-    this.drivetrain = drivetrain;
-    this.drivetrain.setLoggingPrefix(logPrefix);
-    this.visualization = new DrivetrainVisualization(configuration.kMaxDriveSpeed, this.logPrefix);
+    //------------------------------------
+    // TODO: Create new DrivetrainVisualization
+    //------------------------------------
   }
 
   @Override
   public void periodic() {
-    double timestamp = Timer.getFPGATimestamp();
-    drivetrain.updateInputs(inputs);
+    //------------------------------------
+    // TODO: Update drivetrain inputs
+    //------------------------------------
 
-    // Log the state of the drive train
-    visualization.updateViz(inputs);
-    Logger.processInputs("RealOutputs/" + logPrefix + "/Inputs", inputs);
-    drivetrain.logModules(inputs, this.logPrefix);
+    //------------------------------------
+    // TODO: Update DrivetrainVisualization (visualization) + log inputs + log modules (all logs at log prefix)
+    //------------------------------------
 
 
-    // Update standard deviations based on enable state
-    if(DriverStation.isDisabled()){
-      configureStandardDevsForDisabled();
-    }
-    else{
-      configureStandardDevsForEnabled();
-    }
+    //------------------------------------
+    // TODO: Configure odometry standard devs for enabled vs disabled
+    //------------------------------------
 
-    // Log Drive train subsystem latency
-    Logger.recordOutput(
-            this.logPrefix + "/LatencyPeriodicMS", 
-            (Timer.getFPGATimestamp() - timestamp)*1000
-    );
-
-    // Log the drive train subsystems current command
-    Logger.recordOutput(
-            this.logPrefix + "/CurrentCommand",
-            (getCurrentCommand() == null) ? "Default" : getCurrentCommand().getName()
-    );
+    //------------------------------------
+    // TODO: Log current command at current log prefix
+    //------------------------------------
   }
 
   public DrivetrainSubsystem withStartingPose(Pose2d pose){

@@ -25,6 +25,9 @@ import frc.robot.subsystems.drive.DrivetrainSubsystem;
 /** Creates instances of each subsystem specific to the current state of the robot */
 public class SubsystemFactory {
 
+    //------------------------------------
+    // TODO: (Do this one last) Adjust some of the values below to see how it affects the simulation :)
+    //------------------------------------
 
     public static DrivetrainSubsystem createDrivetrainSubsystem(){
         // ---- Drivetrain configuration ---
