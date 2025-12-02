@@ -40,7 +40,7 @@ public interface Loggerable {
             Logger.addDataReceiver(new NT4Publisher());
         }
 
-        /* --- On replay bot do other stuff TODO: Implement --- */
+        /* --- On replay bot do other stuff NOTE: Needs Implementation --- */
 
         // Begin logging
         Logger.start();

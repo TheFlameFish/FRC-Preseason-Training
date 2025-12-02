@@ -5,18 +5,12 @@
 package frc.lib.factories.encoder;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
 import frc.lib.can.CANDeviceID;
 import frc.lib.can.CANStatusLogger;
 import frc.lib.config.encoders.CANCoderConfiguration;
 import frc.lib.encoders.hardware.CANCoderIOHardware;
-import frc.lib.encoders.interfaces.CANCoderIO;
 import frc.lib.phoenix6.CTREUtil;
-
-import edu.wpi.first.wpilibj.RobotBase;
-
 /** 
  * Static factory class for creating instances of our CANCoder device
  */
@@ -28,7 +22,6 @@ public class CANCoderFactory {
      * @return
      */
     public static CANCoderIOHardware createIO(CANCoderConfiguration config){
-        // TODO: UPDATE TO ACTUALLY DO SOMETHING DIFF IF IN SIM
         return new CANCoderIOHardware(config);
     }
 

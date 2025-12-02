@@ -115,7 +115,7 @@ public class DriveWithHeadingCommand extends Command {
     // We should only update our rotational input if the user is providing input or was recently providing input and the rotation rate is still greater than 10 degrees per second
     if (Math.abs(turn) > this.kJoystickSteerDeadband) 
     
-    // This is used if we are driving wit
+    // --- This is used if we are driving with a fixed heading---
     // IF we are attempting to turn the robot
     //       || // // OR our last turn joystick time was within .25 seconds of input (this is just to allow the joystick to settle) AND the bot is still rotating too quickly (more than 10 degress per second)
     //       ((MathUtil.isNear(joystickLastTurnTime, Timer.getFPGATimestamp(), 0.25))  
