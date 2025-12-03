@@ -7,7 +7,6 @@ package frc.lib.config.swerve;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;

@@ -4,14 +4,10 @@
 
 package frc.lib.config.subsystems.drive;
 
-import java.util.List;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import frc.lib.can.CANDeviceID;
-import frc.lib.config.odometry.OdometryStandardDevs;
+import frc.lib.config.odometry.OdometryStdDevs;
 
 /** 
  * Defines how a given drive subsystem is setup
@@ -31,8 +27,8 @@ public class DrivetrainConfiguration {
     public SwerveModuleConstants<?, ?, ?>[] kModuleConstants;
     public SwerveDrivetrainConstants kDriveConstants;
 
-    public OdometryStandardDevs kEnabledOdometryStandardDevs;
-    public OdometryStandardDevs kDisabledOdometryStandardDevs;
+    public OdometryStdDevs kEnabledOdometryStdDevs;
+    public OdometryStdDevs kDisabledOdometryStdDevs;
 
     public DrivetrainConfiguration(){}
 
@@ -78,9 +74,9 @@ public class DrivetrainConfiguration {
         return this;
     }
 
-    public DrivetrainConfiguration withOdometryStandardDevs(OdometryStandardDevs enabledStandardDevs, OdometryStandardDevs disabledStandardDevs){
-        this.kEnabledOdometryStandardDevs = enabledStandardDevs;
-        this.kDisabledOdometryStandardDevs = disabledStandardDevs;
+    public DrivetrainConfiguration withOdometryStdDevs(OdometryStdDevs enabledStdDevs, OdometryStdDevs disabledStdDevs){
+        this.kEnabledOdometryStdDevs = enabledStdDevs;
+        this.kDisabledOdometryStdDevs = disabledStdDevs;
         return this;
     }
 }

@@ -74,29 +74,29 @@ public class DrivetrainIOSim extends DrivetrainIOHardware {
      * Start the simulation thread for the maple sim drive train
      */
     public void startSimThread() {
-        
-        //------------------------------------
-        // TODO: Populate MapleSimSwerveDrivetrain values with simConfig values
-        //------------------------------------
         drivetrainSim =
                 new MapleSimSwerveDrivetrain(
-                        Units.Seconds.of(/* FILL OUT */),       // Simulation Update Rate 5ms = 200hz
-                        Units.Pounds.of(/* FILL OUT */),        // Weight of the robot in pounds
-                        Units.Meters.of(/* FILL OUT */),        // Bumper width meters
-                        Units.Meters.of(/* FILL OUT */),        // Bumper length meters
-                        DCMotor.getKrakenX60(/* FILL OUT */),   // Number of drive motors on 1 swerve module
-                        DCMotor.getKrakenX60(/* FILL OUT */),   // Number of steer motors on 1 swerve module
-                        /* FILL OUT */,                         // Wheel coef. of friction (its ability to resist movement)
-                        getModuleLocations(),                   // Translation 2Ds representing the location of each module
-                        getPigeon2(),                           // Get the pigeon 2 used by the drive train
-                        getModules(),                           // Get the representation of the swerve modules themselves
-                        moduleConstants,                        // Get the swerve module constants values
-                        moduleConfigurations);                  // List of configurations of the swerve modules
+                        // Simulation Update Rate 5ms = 200hz
+                        Units.Seconds.of(simConfig.kSimLoopPeriodMS),
+                        Units.Pounds.of(simConfig.kPhysicalConfiguration.kRobotWeightPounds),
+                        Units.Meters.of(simConfig.kPhysicalConfiguration.kBumperWidthMeters),    
+                        Units.Meters.of(simConfig.kPhysicalConfiguration.kBumperLengthMeters),
+                        // Number of drive motors on 1 swerve module        
+                        DCMotor.getKrakenX60(simConfig.kModuleDriveMotorCount),
+                        // Number of steer motors on 1 swerve module   
+                        DCMotor.getKrakenX60(simConfig.kModuleSteerMotorCount),
+                        // Wheel coef. of friction (its ability to resist movement)   
+                        simConfig.kPhysicalConfiguration.kWheelCoefficientOfFriction,       
+                        getModuleLocations(),      
+                        getPigeon2(),
+                        getModules(),
+                        moduleConstants,
+                        moduleConfigurations);                  
 
 
-        //------------------------------------
-        // TODO: Create and start a thread notifier looping on drivetrainSim::update for simConfig.kSimLoopPeriodMS time
-        //------------------------------------
+        simulationThread = new Notifier(drivetrainSim::update);
+        simulationThread.setName("DrivetrainSimNotifier");
+        simulationThread.startPeriodic(simConfig.kSimLoopPeriodMS / 1000);
     }
 
     /**

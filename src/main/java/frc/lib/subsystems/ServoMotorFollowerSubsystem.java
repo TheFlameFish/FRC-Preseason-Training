@@ -4,8 +4,6 @@
 
 package frc.lib.subsystems;
 
-import java.util.List;
-
 import org.littletonrobotics.junction.Logger;
 
 import frc.lib.config.motors.ServoMotorFollowerConfiguration;

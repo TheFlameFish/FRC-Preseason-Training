@@ -9,9 +9,7 @@ import org.ironmaple.simulation.motorsims.SimulatedBattery;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.CANcoderSimState;
-import com.ctre.phoenix6.sim.ChassisReference;
 import frc.lib.can.CANDeviceID;
 import frc.lib.config.motors.ServoMotorConfiguration;
 

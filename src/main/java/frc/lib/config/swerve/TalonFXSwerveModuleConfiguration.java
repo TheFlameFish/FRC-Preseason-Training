@@ -11,8 +11,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import frc.lib.can.CANDeviceID;
-import frc.lib.can.CANStatusLogger;
-import frc.lib.config.encoders.CANCoderConfiguration;
 import frc.lib.motors.interfaces.MotorIO.NeutralMode;
 
 /** Implementation of the swerve module configuration when using 2 TalonFX motor controllers and one CANCoder */

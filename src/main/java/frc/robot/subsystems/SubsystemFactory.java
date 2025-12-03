@@ -10,10 +10,9 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.util.Units;
 import frc.lib.can.CANDeviceID;
-import frc.lib.config.odometry.OdometryStandardDevs;
+import frc.lib.config.odometry.OdometryStdDevs;
 import frc.lib.config.robot.PhysicalConfiguration;
 import frc.lib.config.robot.Pigeon2GyroConfiguration;
 import frc.lib.config.subsystems.drive.DrivetrainConfiguration;
@@ -32,7 +31,7 @@ public class SubsystemFactory {
     public static DrivetrainSubsystem createDrivetrainSubsystem(){
         // ---- Drivetrain configuration ---
         // Typically this would happen in a designated robot config file set but for this we will just create them here
-        String kDriveSubsystemName = "DriveSubsystem";
+        String kDriveSubsystemName = "Drive";
         String kCanivoreBusName = "CANivore";
 
         // ---- Robot Physical Attributes ----
@@ -77,8 +76,8 @@ public class SubsystemFactory {
         DemobotSwerveModuleConfiguration kSwerveModuleConfigurations = new DemobotSwerveModuleConfiguration(kDriveSubsystemName, kCanivoreBusName);
 
         // Odometry standard deviations for enabled and disabled mode
-        OdometryStandardDevs kDisabledModeStandardDevs = new OdometryStandardDevs(1, 1, 1);
-        OdometryStandardDevs kEnabledModeStandardDevs = new OdometryStandardDevs(0.3, 0.3, 0.2);
+        OdometryStdDevs kDisabledModeStdDevs = new OdometryStdDevs(1, 1, 1);
+        OdometryStdDevs kEnabledModeStdDevs = new OdometryStdDevs(0.3, 0.3, 0.2);
 
         DrivetrainConfiguration kDrivetrainConfiguration = 
             new DrivetrainConfiguration()
@@ -106,9 +105,9 @@ public class SubsystemFactory {
                         }
                     )
                     // .withModuleConstants(NautilusSwerveConstantsComp.kSwerveModuleConstants) // Phoenix Tuner Supplied Constants
-                    .withOdometryStandardDevs(
-                        kEnabledModeStandardDevs,
-                        kDisabledModeStandardDevs
+                    .withOdometryStdDevs(
+                        kEnabledModeStdDevs,
+                        kDisabledModeStdDevs
                     )
                     .withJoystickDeadband(
                         0.05, 

@@ -4,7 +4,6 @@
 
 package frc.lib.encoders.hardware;
 
-import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -18,8 +17,6 @@ import frc.lib.config.encoders.CANCoderConfiguration;
 import frc.lib.encoders.CANCoderInputs;
 import frc.lib.encoders.interfaces.CANCoderIO;
 import frc.lib.factories.encoder.CANCoderFactory;
-import frc.lib.phoenix6.CTREUtil;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 

@@ -7,12 +7,8 @@ package frc.lib.subsystems.simulation.elevator;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
-import frc.lib.config.motors.ServoMotorConfiguration;
 import frc.lib.config.motors.ServoMotorFollowerConfiguration;
-import frc.lib.config.motors.ServoMotorFollowerConfiguration.FollowerConfiguration;
 import frc.lib.motors.hardware.TalonFXIO;
 import frc.lib.motors.interfaces.MotorIO.FollowDirection;
 import frc.lib.motors.sim.TalonFXSimIO;

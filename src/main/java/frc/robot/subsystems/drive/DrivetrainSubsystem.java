@@ -4,12 +4,13 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import frc.lib.config.odometry.OdometryStandardDevs;
+import frc.lib.config.odometry.OdometryStdDevs;
 import frc.lib.config.subsystems.drive.DrivetrainConfiguration;
 import frc.lib.subsystems.drive.DrivetrainIO;
 import frc.lib.subsystems.drive.DrivetrainInputs;
@@ -19,14 +20,13 @@ import frc.lib.subsystems.simulation.visualizations.DrivetrainVisualization;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
   // Reference to the drivetrain and the inputs to the drivetrain
-  protected DrivetrainIO drivetrain;
+  protected DrivetrainIO io;
   protected DrivetrainInputs inputs = new DrivetrainInputs();
 
   // Configuration of this given drivetrain
@@ -43,38 +43,31 @@ public class DrivetrainSubsystem extends SubsystemBase {
     DrivetrainConfiguration configuration,
     DrivetrainIO drivetrain
   ) {
-    
-    //------------------------------------
-    // TODO: 
-    // Setup: 
-    //    this.logPrefix
-    //    this.configuration
-    //    this.drivetrain + loggingPrefix
-    //------------------------------------
+    this.logPrefix = "Subsystems/" + configuration.kConfigurationName;
+    this.configuration = configuration;
+    this.io = drivetrain;
+    this.visualization = new DrivetrainVisualization(configuration.kMaxDriveSpeed, logPrefix);
 
-    //------------------------------------
-    // TODO: Create new DrivetrainVisualization
-    //------------------------------------
+    this.io.setLoggingPrefix(logPrefix);
   }
 
   @Override
   public void periodic() {
-    //------------------------------------
-    // TODO: Update drivetrain inputs
-    //------------------------------------
+    io.updateInputs(inputs);
 
-    //------------------------------------
-    // TODO: Update DrivetrainVisualization (visualization) + log inputs + log modules (all logs at log prefix)
-    //------------------------------------
+    visualization.updateViz(inputs);
+    io.logModules(inputs, logPrefix);
+    Logger.processInputs(logPrefix, inputs);
 
+    setStateStdDevs(
+      DriverStation.isEnabled() 
+        ? configuration.kEnabledOdometryStdDevs
+        : configuration.kDisabledOdometryStdDevs
+    );
 
-    //------------------------------------
-    // TODO: Configure odometry standard devs for enabled vs disabled
-    //------------------------------------
-
-    //------------------------------------
-    // TODO: Log current command at current log prefix
-    //------------------------------------
+    Logger.recordOutput(
+      logPrefix + "/CurrentCommand", 
+      (getCurrentCommand() != null) ? getCurrentCommand().getName() : "N/A");
   }
 
   public DrivetrainSubsystem withStartingPose(Pose2d pose){
@@ -84,7 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // ---- Odometry updates ----
   public void resetOdometry(Pose2d pose) {
-    drivetrain.resetOdometry(pose);
+    io.resetOdometry(pose);
   }
 
   // --- Drive train commanding ----
@@ -95,7 +88,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return The command applying the request
    */
   public Command applyRequest(Supplier<SwerveRequest> request){
-    return drivetrain.continuousRequestCommand(request, this)
+    return io.continuousRequestCommand(request, this)
       .withName("SwerveDriveRequest");
   }
 
@@ -104,7 +97,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param request The swerve drive request to pass to the drivetrain
    */
   public void setControl(SwerveRequest request) {
-    drivetrain.setControl(request);
+    io.setControl(request);
   }
 
   // ---- Input Deadbanding ----
@@ -122,28 +115,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   // ---- Odometry standard deviation adjustment ----
-  protected void setStateStdDevs(OdometryStandardDevs stdDevs){
-    drivetrain.setOdometryStdDevs(stdDevs.xStdDev, stdDevs.yStdDev, stdDevs.rotStdDev);
-  }
-  
-  /**
-   * Set odometry standard deviation for when the robot is DISABLED
-   */
-  public void configureStandardDevsForDisabled() {
-    setStateStdDevs(this.configuration.kDisabledOdometryStandardDevs);
-  }
-
-  /**
-   * Set odometry standard deviation for when the robot is ENABLED
-   */
-  public void configureStandardDevsForEnabled() {
-      setStateStdDevs(this.configuration.kEnabledOdometryStandardDevs);
+  protected void setStateStdDevs(OdometryStdDevs stdDevs){
+    io.setOdometryStdDevs(stdDevs.xStdDev, stdDevs.yStdDev, stdDevs.rotStdDev);
   }
 
   // Attempt to get the sim drive train
   public MapleSimSwerveDrivetrain getSimDrivetrain(){
-    if (drivetrain instanceof DrivetrainIOSim){
-      return ((DrivetrainIOSim) drivetrain).getMapleSimDrive();
+    if (io instanceof DrivetrainIOSim){
+      return ((DrivetrainIOSim) io).getMapleSimDrive();
     }
 
     return null;

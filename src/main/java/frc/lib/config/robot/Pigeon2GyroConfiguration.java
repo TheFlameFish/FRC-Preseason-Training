@@ -4,14 +4,10 @@
 
 package frc.lib.config.robot;
 
-import java.util.function.Supplier;
-
 import com.ctre.phoenix6.configs.GyroTrimConfigs;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import frc.lib.can.CANDeviceID;
-import frc.lib.can.CANStatusLogger;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 
 /** 
