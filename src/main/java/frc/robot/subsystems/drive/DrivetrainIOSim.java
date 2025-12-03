@@ -77,7 +77,7 @@ public class DrivetrainIOSim extends DrivetrainIOHardware {
         drivetrainSim =
                 new MapleSimSwerveDrivetrain(
                         // Simulation Update Rate 5ms = 200hz
-                        Units.Seconds.of(simConfig.kSimLoopPeriodMS),
+                        Units.Milliseconds.of(simConfig.kSimLoopPeriodMS),
                         Units.Pounds.of(simConfig.kPhysicalConfiguration.kRobotWeightPounds),
                         Units.Meters.of(simConfig.kPhysicalConfiguration.kBumperWidthMeters),    
                         Units.Meters.of(simConfig.kPhysicalConfiguration.kBumperLengthMeters),

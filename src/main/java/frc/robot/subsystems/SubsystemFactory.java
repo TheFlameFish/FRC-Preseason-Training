@@ -117,7 +117,7 @@ public class SubsystemFactory {
         // ---- Drivetrain Simulation Attributes ----
         // Simulation specific drivetrain configuration elements
         DrivetrainSimConfiguration kSimulatedDrivetrainConfiguration = 
-            new DrivetrainSimConfiguration(0.005) // 5 ms thread loop time
+            new DrivetrainSimConfiguration(5) // 5 ms thread loop time
                     .withName(kDriveSubsystemName)
                     .withPhysicalConfiguration(kPhysicalConfiguration)
                     .withModuleDriveMotorCount(1)
