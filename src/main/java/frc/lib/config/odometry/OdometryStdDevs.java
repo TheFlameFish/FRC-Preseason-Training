@@ -7,18 +7,4 @@ package frc.lib.config.odometry;
 /** 
  * Class used to represent odometry standard deviations
  */
-public class OdometryStdDevs {
-    public final double xStdDev;
-    public final double yStdDev;
-    public final double rotStdDev;
-
-    public OdometryStdDevs(
-        double xStdDevM,
-        double yStdDevM,
-        double rotStdDevM
-    ){
-        this.xStdDev =xStdDevM;
-        this.yStdDev = yStdDevM;
-        this.rotStdDev = rotStdDevM;
-    }
-}
+public record OdometryStdDevs(double xStdDev, double yStdDev, double rotStdDev) {}

@@ -116,7 +116,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // ---- Odometry standard deviation adjustment ----
   protected void setStateStdDevs(OdometryStdDevs stdDevs){
-    io.setOdometryStdDevs(stdDevs.xStdDev, stdDevs.yStdDev, stdDevs.rotStdDev);
+    io.setOdometryStdDevs(stdDevs.xStdDev(), stdDevs.yStdDev(), stdDevs.rotStdDev());
   }
 
   // Attempt to get the sim drive train
